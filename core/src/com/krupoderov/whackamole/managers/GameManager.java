@@ -20,13 +20,15 @@ public class GameManager {
 
     static Texture holeTexture; // texture image for hole
     static Array<Sprite> holeSprites; // array of hole sprites
-    private static float HOLE_RESIZE_FACTOR = 1100f;
 
     private static float MOLE_RESIZE_FACTOR = 2500f;
+
     public static float MOLE_VERT_POSITION_FACTOR = 3f;
     public static float MOLE1_HORIZ_POSITION_FACTOR = 5.8f;
     public static float MOLE2_HORIZ_POSITION_FACTOR = 2.4f;
     public static float MOLE3_HORIZ_POSITION_FACTOR = 1.5f;
+
+    private static float HOLE_RESIZE_FACTOR = 1100f;
 
     public static void initialize(float width, float height) {
         backgroundTexture = new Texture(Gdx.files.internal("data/ground.jpg"));
@@ -55,29 +57,31 @@ public class GameManager {
         moles = new Array<>();
         moleTexture = new Texture(Gdx.files.internal("data/mole.png"));
         // instantiate new moles and add it to the array
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 9; i++) {
             moles.add(new Mole());
         }
 
-        // set the mole's display position
-        moles.get(0).position.set(
-                width/MOLE1_HORIZ_POSITION_FACTOR,
-                height/MOLE_VERT_POSITION_FACTOR);
-        moles.get(1).position.set(
-                width/MOLE2_HORIZ_POSITION_FACTOR,
-                height/MOLE_VERT_POSITION_FACTOR);
-        moles.get(2).position.set(
-                width/MOLE3_HORIZ_POSITION_FACTOR,
-                height/MOLE_VERT_POSITION_FACTOR);
+        for (int i = 0; i < 9; i++) {
 
-        for (Mole mole : moles) {
+            Mole mole = moles.get(i);
+            Sprite sprite = holeSprites.get(i);
+
             // instantiate sprite for the mole with the texture of it
             mole.moleSprite = new Sprite(moleTexture);
 
-            // set the dimension for the mole
-            mole.width = mole.moleSprite.getWidth() * (width/MOLE_RESIZE_FACTOR);
-            mole.height = mole.moleSprite.getHeight() * (width/MOLE_RESIZE_FACTOR); //TODO: width or height???
+            // set mole's dimensions
+            float scaleFactor = width/4000f;
+            mole.scaleFactor = scaleFactor;
+            mole.width = mole.moleSprite.getWidth() * (scaleFactor);
+            mole.height = mole.moleSprite.getHeight() * (scaleFactor);
             mole.moleSprite.setSize(mole.width, mole.height);
+
+            // set mole's position
+            System.out.println("SpriteX: " + sprite.getX() + " SpriteY: " + sprite.getY());
+            mole.position.x = (((2 * sprite.getX() + sprite.getWidth()) / 2) - (mole.moleSprite.getWidth() / 2));
+            mole.position.y = (sprite.getY() + sprite.getHeight() / 5f);
+
+            System.out.println("X: " + mole.position.x + " Y: " + mole.position.y);
             mole.moleSprite.setPosition(mole.position.x, mole.position.y);
         }
     }
