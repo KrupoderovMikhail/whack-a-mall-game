@@ -15,6 +15,9 @@ public class GameManager {
     static Array<Mole> moles; // array of the moles
     static Texture moleTexture; // texture image for the mole
 
+    static Texture backgroundTexture; // texture image for background
+    static Sprite backgroundSprite; // sprite for background
+
     private static float MOLE_RESIZE_FACTOR = 2500f;
 
     public static float MOLE_VERT_POSITION_FACTOR = 3f;
@@ -23,6 +26,12 @@ public class GameManager {
     public static float MOLE3_HORIZ_POSITION_FACTOR = 1.5f;
 
     public static void initialize(float width, float height) {
+        backgroundTexture = new Texture(Gdx.files.internal("data/ground.jpg"));
+        backgroundSprite = new Sprite(backgroundTexture); // set background sprite
+        // set background sprite's dimensions and position
+        backgroundSprite.setSize(width, height);
+        backgroundSprite.setPosition(0, 0f);
+
         moles = new Array<>();
         moleTexture = new Texture(Gdx.files.internal("data/mole.png"));
         // instantiate new moles and add it to the array
@@ -54,6 +63,7 @@ public class GameManager {
     }
 
     public static void renderGame(SpriteBatch batch) {
+        backgroundSprite.draw(batch);
         // render(draw) each mole
         for (Mole mole : moles) {
             mole.render(batch);
@@ -61,6 +71,7 @@ public class GameManager {
     }
 
     public static void dispose() {
+        backgroundTexture.dispose();
         // dispose of the mole texture to ensure no memory leaks
         moleTexture.dispose();
     }
