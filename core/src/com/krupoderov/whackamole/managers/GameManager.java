@@ -18,8 +18,11 @@ public class GameManager {
     static Texture backgroundTexture; // texture image for background
     static Sprite backgroundSprite; // sprite for background
 
-    private static float MOLE_RESIZE_FACTOR = 2500f;
+    static Texture holeTexture; // texture image for hole
+    static Array<Sprite> holeSprites; // array of hole sprites
+    private static float HOLE_RESIZE_FACTOR = 1100f;
 
+    private static float MOLE_RESIZE_FACTOR = 2500f;
     public static float MOLE_VERT_POSITION_FACTOR = 3f;
     public static float MOLE1_HORIZ_POSITION_FACTOR = 5.8f;
     public static float MOLE2_HORIZ_POSITION_FACTOR = 2.4f;
@@ -31,6 +34,23 @@ public class GameManager {
         // set background sprite's dimensions and position
         backgroundSprite.setSize(width, height);
         backgroundSprite.setPosition(0, 0f);
+
+        holeTexture = new Texture(Gdx.files.internal("data/hole.png"));
+        holeSprites = new Array<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                Sprite sprite = new Sprite(holeTexture);
+                // resize the holes
+                sprite.setSize(
+                        sprite.getWidth() * (width / HOLE_RESIZE_FACTOR),
+                        sprite.getHeight() * (width / HOLE_RESIZE_FACTOR));
+                // position the holes so they are in the center of the ground
+                sprite.setPosition(
+                        width * (j + 1) / 4f - sprite.getWidth() / 2,
+                        height * (i + 1) / 4.4f - sprite.getHeight());
+                holeSprites.add(sprite);
+            }
+        }
 
         moles = new Array<>();
         moleTexture = new Texture(Gdx.files.internal("data/mole.png"));
@@ -63,7 +83,12 @@ public class GameManager {
     }
 
     public static void renderGame(SpriteBatch batch) {
+        // render(draw) background
         backgroundSprite.draw(batch);
+        // render each hole
+        for (Sprite sprite : holeSprites) {
+            sprite.draw(batch);
+        }
         // render(draw) each mole
         for (Mole mole : moles) {
             mole.render(batch);
@@ -72,6 +97,7 @@ public class GameManager {
 
     public static void dispose() {
         backgroundTexture.dispose();
+        holeTexture.dispose();
         // dispose of the mole texture to ensure no memory leaks
         moleTexture.dispose();
     }
