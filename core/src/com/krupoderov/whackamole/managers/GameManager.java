@@ -77,11 +77,9 @@ public class GameManager {
             mole.moleSprite.setSize(mole.width, mole.height);
 
             // set mole's position
-            System.out.println("SpriteX: " + sprite.getX() + " SpriteY: " + sprite.getY());
             mole.position.x = (((2 * sprite.getX() + sprite.getWidth()) / 2) - (mole.moleSprite.getWidth() / 2));
             mole.position.y = (sprite.getY() + sprite.getHeight() / 5f);
 
-            System.out.println("X: " + mole.position.x + " Y: " + mole.position.y);
             mole.moleSprite.setPosition(mole.position.x, mole.position.y);
         }
     }
@@ -95,6 +93,7 @@ public class GameManager {
         }
         // render(draw) each mole
         for (Mole mole : moles) {
+            mole.update();
             mole.render(batch);
         }
     }
